@@ -10,12 +10,12 @@ import dotenv from 'dotenv';
 import axios from 'axios';
 
 const httpServer = http.createServer(app);
-export const io = new Server(httpServer, {
-    cors: {
-        origin: "*",
-        credentials: true
-    }
-});
+// export const io = new Server(httpServer, {
+//     cors: {
+//         origin: "*",
+//         credentials: true
+//     }
+// });
 
 
 
