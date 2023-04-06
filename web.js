@@ -8,11 +8,6 @@ import url from 'url';
 import request from 'request';
 import dotenv from 'dotenv';
 import axios from 'axios';
-// import Kakao from 'kakao-sdk';
-
-// const KAKAO_API_KEY = 'yYAXcD_rmdtc4JHScR47xs4qZRNN0Lx_PRvRU5pECiolkQAAAYcDIBv0';
-// const KAKAO_REST_API_KEY = '3dbb376e580cba18110e5b1ceb927d9a';
-
 
 const httpServer = http.createServer(app);
 export const io = new Server(httpServer, {
@@ -44,116 +39,116 @@ app.post('/gy/:name', async function (req, res) {
     let result = new Object();
 })
 
-app.get('/kakao/:name', async function (req, res) {
-    console.log('kakao', KAKAO_API_KEY)
-    const { name } = req.params
-    if (name === 'test') {
-        const receiverNumber = '01099881400';
-        const message = 'MESSAGE_CONTENT';
-        const options = {
-            url: '/v1/api/talk/friends/message/default/send',
-            headers: {
-                Authorization: `Bearer ${KAKAO_API_KEY}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            data: {
-                receiver_uuids: receiverNumber,
-                template_object: {
-                    text: message
-                }
-            },
-        };
-        request(options, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                console.log('메시지 전송 성공');
-            } else {
-                console.log('메시지 전송 실패');
-            }
-        });
-    }
+// app.get('/kakao/:name', async function (req, res) {
+//     console.log('kakao', KAKAO_API_KEY)
+//     const { name } = req.params
+//     if (name === 'test') {
+//         const receiverNumber = '01099881400';
+//         const message = 'MESSAGE_CONTENT';
+//         const options = {
+//             url: '/v1/api/talk/friends/message/default/send',
+//             headers: {
+//                 Authorization: `Bearer ${KAKAO_API_KEY}`,
+//                 'Content-Type': 'application/x-www-form-urlencoded',
+//             },
+//             data: {
+//                 receiver_uuids: receiverNumber,
+//                 template_object: {
+//                     text: message
+//                 }
+//             },
+//         };
+//         request(options, function (error, response, body) {
+//             if (!error && response.statusCode === 200) {
+//                 console.log('메시지 전송 성공');
+//             } else {
+//                 console.log('메시지 전송 실패');
+//             }
+//         });
+//     }
 
 
 
-    if (name === 'token') {
-        console.log('token')
-        // https://kauth.kakao.com/oauth/authorize?client_id={REST API 키}&
-        // redirect_uri=https://localhost:3000&response_type=code&scope=talk_message
-        const options = {
-            uri: 'https://kauth.kakao.com/oauth/token',
-            method: 'POST',
-            form: {
-                grant_type: 'client_credentials',
-                client_id: '3dbb376e580cba18110e5b1ceb927d9a',
-            },
-        };
+//     if (name === 'token') {
+//         console.log('token')
+//         // https://kauth.kakao.com/oauth/authorize?client_id={REST API 키}&
+//         // redirect_uri=https://localhost:3000&response_type=code&scope=talk_message
+//         const options = {
+//             uri: 'https://kauth.kakao.com/oauth/token',
+//             method: 'POST',
+//             form: {
+//                 grant_type: 'client_credentials',
+//                 client_id: '3dbb376e580cba18110e5b1ceb927d9a',
+//             },
+//         };
 
-        request(options, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                const access_token = JSON.parse(body).access_token;
-                console.log(`Access Token: ${access_token}`);
-            } else {
-                console.log('인증 실패');
-            }
-        });
-    }
-
-
-    if (name === 'send_me') {
-        const options = {
-            uri: 'https://kapi.kakao.com/v2/api/talk/memo/default/send',
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${KAKAO_API_KEY}`,
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            form: {
-                template_object: JSON.stringify({
-                    object_type: 'text',
-                    text: 'Hello, world!',
-                    link: {
-                        web_url: 'https://developers.kakao.com',
-                    },
-                }),
-            },
-        };
-
-        request(options, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                console.log('메시지 전송 성공');
-            } else {
-                console.log('메시지 전송 실패');
-            }
-        });
-    } else if (name === 'find') {
-        console.log('find')
-
-        const options = {
-            uri: 'https://kapi.kakao.com/v1/api/talk/friends',
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${KAKAO_API_KEY}`,
-            }, params: {
-                offset: 3,
-                limit: 3,
-                order: 'asc'
-            }
-        };
-
-        request(options, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                const friends = JSON.parse(body).elements;
-                friends.forEach((friend) => {
-                    console.log(`${friend.profile_nickname}의 UUID: ${friend.uuid}`);
-                });
-            } else {
-                console.log('친구 목록 조회 실패', response.body);
-            }
-        });
-    }
+//         request(options, function (error, response, body) {
+//             if (!error && response.statusCode === 200) {
+//                 const access_token = JSON.parse(body).access_token;
+//                 console.log(`Access Token: ${access_token}`);
+//             } else {
+//                 console.log('인증 실패');
+//             }
+//         });
+//     }
 
 
+//     if (name === 'send_me') {
+//         const options = {
+//             uri: 'https://kapi.kakao.com/v2/api/talk/memo/default/send',
+//             method: 'POST',
+//             headers: {
+//                 Authorization: `Bearer ${KAKAO_API_KEY}`,
+//                 'Content-Type': 'application/x-www-form-urlencoded',
+//             },
+//             form: {
+//                 template_object: JSON.stringify({
+//                     object_type: 'text',
+//                     text: 'Hello, world!',
+//                     link: {
+//                         web_url: 'https://developers.kakao.com',
+//                     },
+//                 }),
+//             },
+//         };
 
-})
+//         request(options, function (error, response, body) {
+//             if (!error && response.statusCode === 200) {
+//                 console.log('메시지 전송 성공');
+//             } else {
+//                 console.log('메시지 전송 실패');
+//             }
+//         });
+//     } else if (name === 'find') {
+//         console.log('find')
+
+//         const options = {
+//             uri: 'https://kapi.kakao.com/v1/api/talk/friends',
+//             method: 'GET',
+//             headers: {
+//                 Authorization: `Bearer ${KAKAO_API_KEY}`,
+//             }, params: {
+//                 offset: 3,
+//                 limit: 3,
+//                 order: 'asc'
+//             }
+//         };
+
+//         request(options, function (error, response, body) {
+//             if (!error && response.statusCode === 200) {
+//                 const friends = JSON.parse(body).elements;
+//                 friends.forEach((friend) => {
+//                     console.log(`${friend.profile_nickname}의 UUID: ${friend.uuid}`);
+//                 });
+//             } else {
+//                 console.log('친구 목록 조회 실패', response.body);
+//             }
+//         });
+//     }
+
+
+
+// })
 app.get('/jbd/:name', async function (req, res) {
     const { name } = req.params
     let _url = req.url;
