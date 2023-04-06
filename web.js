@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.header("Access-Control-Allow-Credentials", 'true')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // 모든 HTTP 메서드 허용
     res.header('Content-Type', "application/json")
-    res.json('welcome')
+    res.json('welcome My port Number:8002')
 })
 
 
@@ -461,9 +461,3 @@ const freetaxbillfiled = ' "05"as `전자(세금)계산서 종류\n(01:일반, 0
 httpServer.listen(8002, function (req, res) {
     console.log('server start')
 })
-
-
-
-// sql.updateData('usertable', { username: 'John Doe', password: 30 }, '', (rowsAffected) => {
-//     console.log(`${rowsAffected} rows updated`);
-// });
