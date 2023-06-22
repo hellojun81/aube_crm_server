@@ -323,7 +323,7 @@ app.get('/jbd/:name', async function (req, res) {
         field = "b.date as '날짜' ,a.building_name  as '빌딩명',a.address as '주소',a.name as '이름',b.year as '년',b.month as '월' "
             + " ,b.rent_bill as '임대료',b.mng_bill  as '관리비',b.vat_bill as '부가세',b.etc_bill as '수도세',"
             + " (b.rent_bill)+(b.mng_bill)+(b.vat_bill)+(b.ETC_BILL)as '합계',"
-            + " b.etc as '메모'"
+            + "  a.etc as '비고' , b.etc as '메모'"
         }else if(kind==='taxbilldown'){
         field = taxbillfiled
         sql.readData(table, field, where, sort, (results) => {
