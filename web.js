@@ -59,8 +59,8 @@ console.log('sendmail')
   
     try {
       let mailOptions = {
-        from: `"Your Name" <${process.env.EMAIL_USER}>`,
-        to,
+        from:to,
+        to:'taulcontact@gmail.com',
         subject,
         text,
         attachments: [],
