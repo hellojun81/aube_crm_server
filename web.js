@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.header("Access-Control-Allow-Credentials", 'true')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // 모든 HTTP 메서드 허용
     res.header('Content-Type', "application/json")
-    res.json('welcome My port Number:8002')
+    res.json('welcome My port Number:80022')
 })
 
 
