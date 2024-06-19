@@ -8,7 +8,12 @@ import url from 'url';
 import request from 'request';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import nodemailer from 'nodemailer';
+import multer from 'multer';
 
+dotenv.config();
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const httpServer = http.createServer(app);
 // export const io = new Server(httpServer, {
 //     cors: {
@@ -40,6 +45,7 @@ app.post('/gy/:name', async function (req, res) {
 })
 
 app.post('/sendmail', upload.array('files'), async (req, res) => {
+console.log('sendmail')
     const { to, subject, text } = req.body;
     const files = req.files;
   console.log(process.env.EMAIL_USER)
