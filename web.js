@@ -48,7 +48,6 @@ app.post('/sendmail', upload.array('files'), async (req, res) => {
 console.log('sendmail')
     const { to, subject, text } = req.body;
     const files = req.files;
-  console.log(process.env.EMAIL_USER)
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -56,12 +55,14 @@ console.log('sendmail')
         pass: 'arcyhahhypapzczk',
       },
     });
-  
+  console.log('to',to)
+let frommail='hell@daum.net'
     try {
       let mailOptions = {
         from:to,
         to:'taulcontact@gmail.com',
-        subject,
+        cc:to,
+        subject:'[홈페이지 수신메일]'+subject,
         text,
         attachments: [],
       };
