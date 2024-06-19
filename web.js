@@ -39,6 +39,47 @@ app.post('/gy/:name', async function (req, res) {
     let result = new Object();
 })
 
+app.post('/sendmail', upload.array('files'), async (req, res) => {
+    const { to, subject, text } = req.body;
+    const files = req.files;
+  console.log(process.env.EMAIL_USER)
+    let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'taulcontact@gmail.com',
+        pass: 'arcyhahhypapzczk',
+      },
+    });
+  
+    try {
+      let mailOptions = {
+        from: `"Your Name" <${process.env.EMAIL_USER}>`,
+        to,
+        subject,
+        text,
+        attachments: [],
+      };
+  
+      if (files) {
+        files.forEach(file => {
+          mailOptions.attachments.push({
+            filename: file.originalname,
+            content: file.buffer,
+          });
+        });
+      }
+  
+      let info = await transporter.sendMail(mailOptions);
+  
+      console.log('Message sent: %s', info.messageId);
+      res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      res.status(500).json({ error: 'Error sending email' });
+    }
+  });
+
+
 // app.get('/kakao/:name', async function (req, res) {
 //     console.log('kakao', KAKAO_API_KEY)
 //     const { name } = req.params
