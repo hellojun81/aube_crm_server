@@ -1,0 +1,17 @@
+{"mysql":{
+    "host":"jcooly.cafe24.com",
+    "user":"jcooly",
+    "password":"dkffjqb@81",
+    "database":"jcooly",
+    "port":"3306",
+    "multipleStatements":true
+}
+,"Email":
+    {
+        "user":"freshwangs",
+        "pass":"jeju2022!",
+        "mail":"freshwangs@naver.com"
+    }
+
+
+}

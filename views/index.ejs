@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/jexcel.js"></script>
+    <script src="../js/jsuites.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+    <script src="../js/tableExport.js"></script>
+    <script src="../js/FileSaver.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="css/icofont.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="../css/order.css">
+    <link rel="stylesheet" href="../js/jsuites.css" type="text/css" />
+    <link rel="stylesheet" href="../js/jexcel.css" type="text/css" />
+
+</head>
+<h5 class="title"><a
+    href="https://jcool2.cafe24api.com/api/v2/oauth/authorize?response_type=code&client_id=GEFyFA7aBJVkIXAsrFjUxB&state=app_install&redirect_uri=https://jcooly.cafe24.com/gyulwang/node_cafe24.html&scope=mall.read_order,mall.write_order">귤왕</a>
+</h5>
+
+<body>
+
+    <div class="">
+        <div class="searchbox">
+            <select name="provider" id="selProvider"> </select>
+            <button type="submit" class="search" onclick="getOrder();">검색</button>
+            <textarea class="log"></textarea>
+        </div>
+        <input type="checkbox" name="xxx" value="yyy" checked>자동메일보내기</input>
+        <div class="export-data-block">
+           
+            <button type="submit" value="sendMail" onclick="MakeOrderList();">발주서_메일보내기</button>
+            <button type="submit" value="sendMail" onclick="uploadInvoice();">운송장번호_전송</button>
+        </div>
+        <div class="inputform">
+            <input type="file" onchange="upload(event)" style="padding-top: 10px;" /></input>
+        </div>
+
+        <div class="resultTable"></div>
+        <div id="fade" class="black_background"></div>
+        <div id="light" class="234white_content" style="display:none;z-index:999;">
+            <img src="https://jcooly.cafe24.com/test/Walk.gif" style="z-index:1002;">
+            <!-- <img src="http://jcooly.cafe24.com/gyulwang/loading.png"> -->
+
+        </div>
+</body>
+
+<script>
+    var myTable;
+    var OrderData;
+    var TableCnt
+    var nodeUrl = 'http://localhost:8001/gy'
+    var proNameArr = new Array();
+    var access_token='xiCnFYlRPRNqcWgVG9E1wA';
+    $(document).ready(function () {
+        getProvider();
+
+        if (getToken() == 'invalid_grant') {
+            log('토큰값만료....')
+        } else {
+            log('귤왕발주서검색준비....')
+        }
+
+    });
+    
+
+
+    async function getToken() {
+        try {
+            let str = location.href.split('code=');
+            str = str[1].split('&');
+            console.log(str[0]);
+            access_token =  getPromise('/getToken=' + str[0]);
+            access_token = access_token[0];
+            console.log(access_token);
+            return access_token;
+        } catch (err) {
+            return 'invalid_grant';
+        }
+    }
+    async function getProvider() {
+        // const response = await fetch(nodeUrl + '/getProvider');
+
+        const data = await getPromise('/getProvider');
+        $('#selProvider').append('<option value=전체>전체</option>')
+        for (i = 0; i < data.length; i++) {
+            $('#selProvider').append('<option value="' + data[i].name
+                + '"shipping_company_code="' + data[i].shipping_company_code
+                + ' "carrier_id="' + data[i].carrier_id
+                + ' "invoice_col="' + data[i].invoice_col
+                + ' "ordercode_col="' + data[i].ordercode_nodcol
+                + ' "name_col="' + data[i].name_col
+                + '">' + data[i].name + '</option>')
+        }
+    }
+
+    async function MakeOrderList() {
+        let provider = new Array();
+        var obj = document.getElementById("selProvider");
+        log('발주서_메일보내기:start')
+        if (obj.value == "전체") {
+            let a = await getPromise('/makeOrdermail?proname=ALL&access_token=' + access_token)
+        } else {
+            let a = await getPromise('/makeOrdermail?proname=' + proname + '&access_token=' + access_token)
+        }
+    }
+    
+    async function getPromise(param) {
+        return await new Promise(async function (resolve, reject) {
+            // const Response = await fetch('http://localhost:8001/gy/getProvider')
+            const Response = await fetch(nodeUrl + param)
+            const data = await Response.json();
+            resolve(data)
+        })
+
+    }
+
+    async function uploadInvoice() {
+        let shipping_company_code = $("#selProvider option:selected").attr('shipping_company_code');
+        let carrier_id = $("#selProvider option:selected").attr('carrier_id');
+        let queryString;
+        let error_cnt = 0;
+        let ssuccess_cnt = 0;
+        log('운송장번호_전송:start')
+        for (let i = 0; i < myTable.rows.length; i++) {
+            let tracking_no = myTable.getValueFromCoords(1, i)
+            let order_item_code = myTable.getValueFromCoords(0, i)
+            queryString = '/createship?tracking_no=' + tracking_no + '&order_item_code=' + order_item_code
+                + '&shipping_company_code=' + shipping_company_code.replace(' ', '') + '&carrier_id=' + carrier_id + '&access_token=' + access_token
+            let post = await getPromise(queryString);
+
+            if (post.error.code == '422') {
+                myTable.setValue('D' + (i + 1), "실패", true)
+                myTable.setStyle('A' + (i + 1), 'background-color', 'Red');
+                error_cnt++;
+            }
+            if (post.shipments) {
+                myTable.setValue('D' + (i + 1), "성공", true)
+                myTable.setStyle('A' + (i + 1), 'background-color', 'GREEN')
+                ssuccess_cnt++;
+            }
+        }
+        log('[' + ssuccess_cnt + ']건성공 [' + error_cnt + ']실패')
+    }
+
+   async function getOrder() {
+       await showLayer('show')
+        let arr = new Array();
+        let selPro = $('select').val()
+        let cnt
+        log($('select').val() + '검색')
+        fetch(nodeUrl + '/GetOrder?access_token=' + access_token)
+            .then((response) => response.json())
+            .then((data) => {
+                if ($('select').val() == '전체') {
+                    makeTable(data)
+                } else {
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i].proname == selPro) {
+                            arr.push(data[i])
+                        }
+                    }
+                    makeTable(arr)
+                }
+                for (let i = 0; i < myTable.rows.length; i++) {
+                    let element = myTable.getValueFromCoords(4, i);
+                    if (!proNameArr.includes(element)) {
+                        proNameArr.push(element);
+                    }
+                    if (myTable.getValueFromCoords(4, i) == "거래처 확인불가") {
+                        myTable.setStyle('E' + (i + 1), 'background-color', 'Yellow');
+                    }
+                }
+                log('주문건[' + myTable.rows.length + ']건 농장별발주[' + proNameArr.length + ']건검색완료')
+            });
+        showLayer('hidden')
+    }
+    function upload(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function () {
+            var fdata = reader.result;
+            var read_buffer = XLSX.read(fdata, { type: 'binary' });
+            read_buffer.SheetNames.forEach(function (sheetName) {
+                JsonData = new Object();
+                let ordercode_col = $("#selProvider option:selected").attr('ordercode_col');
+                let invoice_col = $("#selProvider option:selected").attr('invoice_col');
+                let name_col = $("#selProvider option:selected").attr('name_col');
+                var rowdata = XLSX.utils.sheet_to_row_object_array(read_buffer.Sheets[sheetName], { "header": 1 });
+                let arr = new Array()
+                for (let i = 1; i < rowdata.length; i++) {
+                    JsonData = new Object();
+                    JsonData.ordercode_col = rowdata[i][ordercode_col - 1];
+                    JsonData.invoice_col = rowdata[i][invoice_col - 1]
+                    JsonData.name_col = rowdata[i][name_col - 1]
+                    JsonData.null = '';
+                    arr.push(JsonData)
+                }
+                makeTable(arr)
+            })
+        };
+        reader.readAsBinaryString(input.files[0]);
+    }
+
+
+    function makeTable(data) {
+        TableCnt++;
+        data.sort(function (a, b) {  //옵션명으로 정렬
+            return a.order_item_name < b.order_item_name ? -1 : a.order_item_name > b.order_item_name ? 1 : 0;  // 광희, 명수, 재석, 형돈 
+        });
+        let idName = 'spreadsheet' + TableCnt
+        $('.resultTable').empty()
+        $('.resultTable').append('<div id="' + idName + '"></div>')
+        let arr = new Array()
+        myTable = (jspreadsheet(document.getElementById(idName), {
+            data: data,
+            columns: [
+                { type: 'text', width: 100 },
+                { type: 'text', width: 100 },
+            ],
+
+        }));
+    }
+
+    function current() {
+        let today = new Date();
+        let year = today.getFullYear(); // 년도
+        let month = today.getMonth() + 1;  // 월
+        let date = today.getDate();  // 날짜
+        let day = today.getDay();
+        let hours = today.getHours(); // 시
+        let minutes = today.getMinutes();  // 분
+        let seconds = today.getSeconds();  // 초
+        let milliseconds = today.getMilliseconds();
+        let current = hours + ':' + minutes + ':' + seconds
+        return year + '/' + month + '/' + date + '[' + current + ']';
+    }
+    function log(msg) {
+        $('textarea').append(current() + ' ' + msg + '\n')
+    }
+    function wrapWindowByMask() {
+        //화면의 높이와 너비를 구한다.
+        var maskHeight = $(document).height();
+        var maskWidth = $(window).width();
+
+        //마스크의 높이와 너비를 화면 것으로 만들어 전체 화면을 채운다.
+        $('#fade').css({ 'width': maskWidth, 'height': maskHeight });
+    }
+    /// 화면의 중앙에 레이어띄움
+    function showLayer(type) {
+        wrapWindowByMask();
+        $("#light").css("position", "absolute");
+        $("#light").css("top", Math.max(0, (($(window).height() - $("#light").outerHeight()) / 2) + $(window).scrollTop()) + "px");
+        $("#light").css("left", Math.max(0, (($(window).width() - $("#light").outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+        if (type == 'show') {
+            $('#fade').show();
+            $('#light').show();
+        } else {
+            $('#fade').hide();
+            $('#light').hide();
+        }
+    }
+
+    ////////////////엑셀파일로 내보내기:S////////////////
+    function exportExcel(excelHandler) {
+        var wb = XLSX.utils.book_new();
+        var newWorksheet = excelHandler.getWorksheet();
+        XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName());
+        var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+        saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), excelHandler.getExcelFileName());
+        log(excelHandler.getExcelFileName() + '_생성완료')
+    }
+    function s2ab(s) {
+        var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+        var view = new Uint8Array(buf);  //create uint8array as viewer
+        for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+        return buf;
+    }
+////////////////엑셀파일로 내보내기:E////////////////
+
+</script>
+
+</html>

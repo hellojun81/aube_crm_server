@@ -1,0 +1,61 @@
+
+.jexcel{
+  font-size: 10px;
+}
+/* 
+input,select{
+  height:8px!important;
+}
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root,
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input,
+.MuiButtonBase{
+  height:40px;
+} */
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input{
+  text-align: left;
+}
+.App {
+  text-align: center;
+}
+.css-85zwa9-MuiInputBase-root-MuiFilledInput-root{padding-top: 0px!important;}
+.css-ahj2mt-MuiTypography-root{font-size: 12px!important;color:#000;}
+.css-1idn90j-MuiGrid-root{text-align: left;}
+/* .MuiInputBase-input,
+.MuiSelect-select {height:12px!important} */
+#jexcel_textarea,.jexcel_about{display: none;}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+.jexcel_overflow{width:100%}
+@import url('https://bossanova.uk/jexcel/v4/jexcel.css');
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
