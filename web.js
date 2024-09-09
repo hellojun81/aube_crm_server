@@ -26,7 +26,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-app.set('views', __dirname + '/views');
+// app.set('views', __dirname + '/views');
 app.use(cors({   
     origin:true,
     credentials: true, // 크로스 도메인 허용
