@@ -5,12 +5,13 @@ import columnsRoutes from './routes/columns.js';
 import customersRoutes from './routes/customers.js';
 import scheduleRoutes from './routes/schedules.js';
 import setupRoutes from './routes/setup.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);  // 현재 파일의 경로
-const __dirname = dirname(__filename);   
+// import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// const __filename = fileURLToPath(import.meta.url);  // 현재 파일의 경로
+// const __dirname = dirname(__filename);   
 //nodemon --exec ./node_modules/.bin/ts-node web.js
+
+
 dotenv.config();
 
 const app = express();
