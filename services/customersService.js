@@ -9,14 +9,14 @@ const getCustomers = async () => {
 
 // 특정 고객 가져오기
 const getCustomerById = async (customerName) => {
- 
-    if(customerName==undefined){
-        customerName=''
+
+    if (customerName == undefined) {
+        customerName = ''
     }
-    console.log('customerService customerName',customerName)
+    console.log('customerService customerName', customerName)
     const searchPattern = `%${customerName}%`;
     const query = `SELECT * FROM Customers WHERE customerName LIKE ?`;
-    console.log(query)
+    // console.log(query)
     try {
         const result = await sql.executeQuery(query, [searchPattern]);
         // console.log('Service result', result);
@@ -30,22 +30,31 @@ const getCustomerById = async (customerName) => {
 
 // 고객 추가
 const addCustomer = async (customer) => {
-    const query = 'INSERT INTO Customers (customerName, contactPerson, position, phone, email, leadSource, inboundDate, businessNumber, representative, location, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const params = [
-        customer.customerName,
-        customer.contactPerson,
-        customer.position,
-        customer.phone,
-        customer.email,
-        customer.leadSource,
-        customer.inboundDate,
-        customer.businessNumber,
-        customer.representative,
-        customer.location,
-        customer.notes
-    ];
-    const result = await sql.executeQuery(query, params);
-    return { id: result.insertId, ...customer };
+    const checkquery = `select * from Customers where customerName='${customer.customerName}'`
+    const checkresult = await sql.executeQuery(checkquery)
+    console.log('addCustomer=', checkresult.length)
+
+    if (checkresult.length === 0) {
+        const query = 'INSERT INTO Customers (customerName, contactPerson, position, phone, email, leadSource, inboundDate, businessNumber, representative, location, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        const params = [
+            customer.customerName,
+            customer.contactPerson,
+            customer.position,
+            customer.phone,
+            customer.email,
+            customer.leadSource,
+            customer.inboundDate,
+            customer.businessNumber,
+            customer.representative,
+            customer.location,
+            customer.notes
+        ];
+        const result = await sql.executeQuery(query, params);
+        return { id: result.insertId, ...customer };
+    } else {
+        return ('동일 거래처명이 존재합니다')
+    }
+
 };
 
 // 고객 수정

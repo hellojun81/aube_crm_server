@@ -5,28 +5,15 @@ import columnsRoutes from './routes/columns.js';
 import customersRoutes from './routes/customers.js';
 import scheduleRoutes from './routes/schedules.js';
 import setupRoutes from './routes/setup.js';
-// import { fileURLToPath } from 'url';
-// import { dirname } from 'path';
-// const __filename = fileURLToPath(import.meta.url);  // 현재 파일의 경로
-// const __dirname = dirname(__filename);   
-//nodemon --exec ./node_modules/.bin/ts-node web.js
-
-
-dotenv.config();
-
 const app = express();
 const port = process.env.PORT || 8001;
 
 
 
-app.use(cors({
-    // origin: ['http://localhost:3000', 'http://jcooly.cafe24.com', '39.125.25.33'],
-    origin:true,
-    credentials: true, // 크로스 도메인 허용
-    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
-}));
-app.use(express.json());
+dotenv.config();
 
+
+app.use(express.json());
 // app.set('views', __dirname + '/views');
 app.use(cors({   
     origin:true,

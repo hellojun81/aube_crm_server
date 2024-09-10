@@ -22,7 +22,7 @@ const getScheduleById = async (req, res) => {
         let result
         const { id } = req.params;
         const { startDate, endDate, customerName, SearchMonth } = req.query;
-        console.log({ 'req.query': req.query, id: id })
+        console.log({ 'req.query': req.query, id: id,SearchMonth:SearchMonth })
 
         if (id == 'cs') {
             result = await schedulesService.getcsByDate(startDate, endDate, customerName);
@@ -30,11 +30,19 @@ const getScheduleById = async (req, res) => {
         } else if (id == 'schedules') {
 
             if (SearchMonth) {
-                console.log('gotoGetScheduleMonth')
                 result = await schedulesService.getScheduleByMonth(SearchMonth);
             } else {
                 result = await schedulesService.getScheduleById(SearchMonth);
             }
+
+        }else if(id=='getCsKind'){
+            const query = `SELECT id,title,calView FROM csKind`;
+            result =await  sql.executeQuery(query);
+            // console.log('getCsKind=',result)
+            // return result;
+           
+
+
 
         }else{
             console.log({ 'getScheduleById(id)': req.query, id: id })
@@ -99,8 +107,21 @@ const updateSchedule = async (req, res) => {
     try {
         const { id } = req.params;
         const updatedSchedule = req.body;
-        console.log('스케쥴수정')
-        const result = await schedulesService.updateSchedule(id, updatedSchedule);
+        const {update_ID,SearchMonth}=req.query
+        console.log({'스케쥴수정':req.params,id:id,'update_ID':update_ID,'SearchMonth':SearchMonth})
+        let result 
+        
+        if (id==='getCsKind'){
+            if(update_ID!==''){
+            result = await schedulesService.updateCsKind(update_ID);
+            }else{
+            result = await schedulesService.Inint_csKind();
+            }
+            result = await schedulesService.getScheduleByMonth(SearchMonth);
+        }else{
+            result = await schedulesService.updateSchedule(id, updatedSchedule);
+        }
+
         if (result) {
             res.json({ message: 'Schedule updated successfully' });
         } else {

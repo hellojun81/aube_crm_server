@@ -25,8 +25,8 @@ const getCustomers = async (req, res) => {
 
 const getCustomerById = async (req, res) => {
     try {
-        console.log('getCustomerById',req)
-        const { customerName, } = req.query;
+        const { customerName } = req.query;
+        console.log('getCustomerById',req.params)
         const customer = await customersService.getCustomerById(customerName);
         res.json(customer);
     } catch (error) {
