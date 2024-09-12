@@ -5,8 +5,9 @@ const addCustomer = async (req, res) => {
     try {
         const customer = req.body;
         // console.log('customer',customer)
-        await customersService.addCustomer(customer);
-        res.status(201).json({ message: 'Customer added successfully' });
+        const result=await customersService.addCustomer(customer);
+        console.log(result)
+        res.status(201).json({ message: result.msg });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

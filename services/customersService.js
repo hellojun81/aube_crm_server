@@ -14,11 +14,12 @@ const getCustomerById = async (customerName) => {
         customerName = ''
     }
     console.log('customerService customerName', customerName)
-    const searchPattern = `%${customerName}%`;
-    const query = `SELECT * FROM Customers WHERE customerName LIKE ?`;
+
+    const query = `SELECT * FROM Customers WHERE customerName LIKE '%${customerName}%'
+    or contactPerson Like '%${customerName}%' or notes like '%${customerName}%'`;
     // console.log(query)
     try {
-        const result = await sql.executeQuery(query, [searchPattern]);
+        const result = await sql.executeQuery(query, );
         // console.log('Service result', result);
         return result;
     } catch (error) {
@@ -50,9 +51,9 @@ const addCustomer = async (customer) => {
             customer.notes
         ];
         const result = await sql.executeQuery(query, params);
-        return { id: result.insertId, ...customer };
+        return { msg:'고객 추가 완료',id: result.insertId, ...customer };
     } else {
-        return ('동일 거래처명이 존재합니다')
+        return {msg:'동일 거래처명이 존재합니다'}
     }
 
 };

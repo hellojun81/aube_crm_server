@@ -14,6 +14,7 @@ const getAllSchedules = async () => {
 
 };
 const getCustomerID = async (CustomerName) => {
+    console.log('getCustomerID')
     const query = 'SELECT id FROM Customers where customerName = ?';
     const result = await sql.executeQuery(query, CustomerName);
     return result[0]
@@ -22,13 +23,16 @@ const getCustomerID = async (CustomerName) => {
 const createSchedule = async (schedule) => {
     const { calendarId, csKind, NewTitle, start, end, startTime, endTime, userInt, estPrice, gubun, etc, customerName, rentPlace } = schedule;
     const customerId = await getCustomerID(customerName)
-
     console.log('customerId', customerId.id)
     const query = `INSERT INTO schedules (calendarId, csKind,title, start, end, startTime,endTime, userInt,estPrice,gubun,etc, customerName, rentPlace)VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?)`;
     const result = await sql.executeQuery(query, [calendarId, csKind, NewTitle, start, end, startTime, endTime, userInt, estPrice, gubun, etc, customerId.id, rentPlace]);
 
 };
-
+const getScheduleByCoustomerId = async (id) => {
+    const query = `SELECT * from schedules WHERE customerName = ?`;
+    const result = await sql.executeQuery(query,id);
+    return result;
+};
 const getScheduleById = async (id) => {
     const query = `SELECT ${selectqueryinit} WHERE A.id = ?`;
     const result = await sql.executeQuery(query,id);
@@ -98,6 +102,7 @@ const deleteSchedule = async (id) => {
 export default {
     getAllSchedules,
     createSchedule,
+    getScheduleByCoustomerId,
     getScheduleById,
     getScheduleByMonth,
     updateSchedule,
