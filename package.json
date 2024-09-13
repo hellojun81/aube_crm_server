@@ -1,6 +1,7 @@
 {
   "name": "crm_server",
   "version": "1.0.0",
+  "description": "",
   "main": "node web.js",
   "scripts": {
     "start": "node web.js",
@@ -53,7 +54,6 @@
     "winston-daily-rotate-file": "^4.7.1",
     "xlsx": "^0.18.5"
   },
-  "description": "",
   "type": "module",
   "devDependencies": {
     "eslint": "^8.35.0",
