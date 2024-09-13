@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8001;
 
-app.use(express.json());
+// app.use(express.json());
 
 app.use(cors({   
     origin:true,
@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     res.header("Access-Control-Allow-Credentials", 'true')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // 모든 HTTP 메서드 허용
     res.header('Content-Type', "application/json")
-    res.json('welcome start 123')
+    res.json('welcome  123')
 })
 
 app.use('/api/columns', columnsRoutes);
