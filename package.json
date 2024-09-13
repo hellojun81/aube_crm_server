@@ -1,10 +1,10 @@
 {
   "name": "crm_server",
   "version": "1.0.0",
-  "main": "web.js",
+  "main": "node web.js",
   "scripts": {
     "start": "node web.js",
-    "dev": "nodemon --exec ./node_modules/.bin/ts-node web.js"
+    "dev": "nodemon web.js"
   },
   "keywords": [],
   "author": "",
