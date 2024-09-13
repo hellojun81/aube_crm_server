@@ -5,16 +5,15 @@ import columnsRoutes from './routes/columns.js';
 import customersRoutes from './routes/customers.js';
 import scheduleRoutes from './routes/schedules.js';
 import setupRoutes from './routes/setup.js';
+
+//nodemon --exec ./node_modules/.bin/ts-node web.js
+dotenv.config();
+
 const app = express();
 const port = process.env.PORT || 8001;
 
-
-
-dotenv.config();
-
-
 app.use(express.json());
-// app.set('views', __dirname + '/views');
+
 app.use(cors({   
     origin:true,
     credentials: true, // 크로스 도메인 허용
