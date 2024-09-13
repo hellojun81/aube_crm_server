@@ -10,7 +10,7 @@ import http from 'http';
 dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
-const port = process.env.PORT || 8002;
+const port = process.env.PORT || 8001;
 
 app.use(express.json());
 
@@ -32,6 +32,6 @@ app.get('/', (req, res) => {
 // app.use('/api/schedules', scheduleRoutes);
 // app.use('/api/setup', setupRoutes);
 
-httpServer.listen(8002, function (req, res) {
+httpServer.listen(8001, function (req, res) {
     console.log('server start')
 })
