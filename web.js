@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import columnsRoutes from './routes/columns.js';
-import customersRoutes from './routes/customers.js';
-import scheduleRoutes from './routes/schedules.js';
-import setupRoutes from './routes/setup.js';
+// import columnsRoutes from './routes/columns.js';
+// import customersRoutes from './routes/customers.js';
+// import scheduleRoutes from './routes/schedules.js';
+// import setupRoutes from './routes/setup.js';
 import http from 'http';
 //nodemon --exec ./node_modules/.bin/ts-node web.js
 dotenv.config();
@@ -27,10 +27,10 @@ app.get('/', (req, res) => {
     res.json('welcome 123')
 })
 
-app.use('/api/columns', columnsRoutes);
-app.use('/api/customers', customersRoutes);
-app.use('/api/schedules', scheduleRoutes);
-app.use('/api/setup', setupRoutes);
+// app.use('/api/columns', columnsRoutes);
+// app.use('/api/customers', customersRoutes);
+// app.use('/api/schedules', scheduleRoutes);
+// app.use('/api/setup', setupRoutes);
 
 httpServer.listen(8002, function (req, res) {
     console.log('server start')
