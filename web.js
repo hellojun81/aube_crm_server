@@ -6,7 +6,8 @@ import customersRoutes from './routes/customers.js';
 import scheduleRoutes from './routes/schedules.js';
 import setupRoutes from './routes/setup.js';
 import http from 'http';
-//nodemon --exec ./node_modules/.bin/ts-node web.js
+
+
 dotenv.config();
 const app = express();
 const httpServer = http.createServer(app);
