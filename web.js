@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import columnsRoutes from './routes/columns.js';
+
 import customersRoutes from './routes/customers.js';
 import scheduleRoutes from './routes/schedules.js';
 import setupRoutes from './routes/setup.js';
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
     res.json('welcome aubeCrm ^^')
 })
 
-app.use('/api/columns', columnsRoutes);
+
 app.use('/api/customers', customersRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/setup', setupRoutes);
