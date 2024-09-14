@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     res.header("Access-Control-Allow-Credentials", 'true')
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // 모든 HTTP 메서드 허용
     res.header('Content-Type', "application/json")
-    res.json('welcome 321')
+    res.json('welcome 112312323')
 })
 
 // app.use('/api/columns', columnsRoutes);
