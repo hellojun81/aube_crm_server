@@ -41,7 +41,7 @@ const updateCustomer = async (req, res) => {
         const customer = req.body;
         console.log({id:id,customer:customer})
         await customersService.updateCustomer(id, customer);
-        res.status(200).json({ message: 'Customer updated successfully' });
+        res.status(200).json({ message: '수정 완료' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -51,7 +51,7 @@ const deleteCustomer = async (req, res) => {
     try {
         const { id } = req.params;
         await customersService.deleteCustomer(id);
-        res.status(200).json({ message: 'Customer deleted successfully' });
+        res.status(200).json({ message: '삭제 완료' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

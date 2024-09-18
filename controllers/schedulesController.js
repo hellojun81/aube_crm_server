@@ -117,7 +117,7 @@ const updateSchedule = async (req, res) => {
         }
 
         if (result) {
-            res.json({ message: 'Schedule updated successfully' });
+            res.json({ message: '수정 완료' });
         } else {
             res.status(404).json({ error: 'Schedule not found' });
         }
@@ -133,7 +133,7 @@ const deleteSchedule = async (req, res) => {
         const { id } = req.params;
         const result = await schedulesService.deleteSchedule(id);
         if (result) {
-            res.json({ message: 'Schedule deleted successfully' });
+            res.json({ message: '삭제 완료' });
         } else {
             res.status(404).json({ error: 'Schedule not found' });
         }
