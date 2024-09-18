@@ -1,7 +1,7 @@
 
 // services/schedulesService.js
 import sql from '../lib/sql.js';
-
+import dayjs from 'dayjs';
 
 const selectqueryinit=`A.id, B.customerName,CONCAT('[', C.title, ']', B.customerName) AS title, A.start,A.end,A.rentPlace,A.startTime,A.endTime,A.userInt,A.estPrice
     ,A.gubun,A.etc,A.csKind,C.title as cskindTitle,C.category,C.bgcolor FROM schedules A INNER JOIN Customers B ON A.customerName = B.id  INNER JOIN csKind C ON A.csKind = C.id`
@@ -85,6 +85,9 @@ const Inint_csKind = async () => {
 const updateSchedule = async (id, schedule) => {
     const customerId = await getCustomerID(schedule.customerName)
     schedule.customerName=customerId.id
+    schedule.start = dayjs(schedule.start).format('YYYY-MM-DD');
+    schedule.end = dayjs(schedule.end).format('YYYY-MM-DD');
+
     console.log('schedule.customerName',schedule.customerName)
     const query = 'UPDATE schedules SET ? WHERE id = ?';
     const result = await sql.executeQuery(query, [schedule, id]);

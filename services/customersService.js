@@ -1,5 +1,6 @@
 // services/customersService.js
 import sql from '../lib/sql.js';
+import dayjs from 'dayjs';
 
 // 모든 고객 가져오기
 const getCustomers = async () => {
@@ -34,7 +35,7 @@ const addCustomer = async (customer) => {
     const checkquery = `select * from Customers where customerName='${customer.customerName}'`
     const checkresult = await sql.executeQuery(checkquery)
     console.log('addCustomer=', checkresult.length)
-
+    customer.inboundDate=dayjs(customer.inboundDate).format('YYYY-MM-DD')
     if (checkresult.length === 0) {
         const query = 'INSERT INTO Customers (customerName, contactPerson, position, phone, email, leadSource, inboundDate, businessNumber, representative, location, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const params = [
@@ -60,6 +61,7 @@ const addCustomer = async (customer) => {
 
 // 고객 수정
 const updateCustomer = async (id, customer) => {
+    customer.inboundDate=dayjs(customer.inboundDate).format('YYYY-MM-DD')
     const query = 'UPDATE Customers SET customerName = ?, contactPerson = ?, position = ?, phone = ?, email = ?, leadSource = ?, inboundDate = ?, businessNumber = ?, representative = ?, location = ?, notes = ? WHERE id = ?';
     const params = [
         customer.customerName,

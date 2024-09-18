@@ -32,18 +32,14 @@ app.get('/login', async (req, res) => {
     try {
         // 쿼리 파라미터에서 id와 pw를 가져옴
         const { id, pw } = req.query;
-
         // id 또는 pw가 존재하지 않을 경우 처리
         if (!id || !pw) {
             return res.status(400).json({ message: 'ID와 비밀번호를 모두 입력해주세요.' });
         }
-
         // SQL 쿼리 실행
         const query = `SELECT id, pw FROM login WHERE id = ? AND pw = ?`;
         const result = await sql.executeQuery(query, [id, pw]);
-
         console.log(result);
-
         // 로그인 성공 여부 확인
         if (result.length > 0) {
             res.json(true); // 로그인 성공 시 'true' 반환
