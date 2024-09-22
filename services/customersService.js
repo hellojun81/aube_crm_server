@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 // 모든 고객 가져오기
 const getCustomers = async () => {
-    const query = 'SELECT * FROM Customers';
+    const query = 'SELECT * FROM Customers ORDER BY customerName';
     return await sql.executeQuery(query);
 };
 
