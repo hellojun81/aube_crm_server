@@ -4,7 +4,7 @@ import sql from '../lib/sql.js';
 import dayjs from 'dayjs';
 
 const selectqueryinit=`A.id, B.customerName,CONCAT('[', C.title, ']', B.customerName) AS title, A.start,A.end,A.rentPlace,A.startTime,A.endTime,A.userInt,A.estPrice
-    ,A.gubun,A.etc,A.csKind,C.title as cskindTitle,C.category,C.bgcolor FROM schedules A INNER JOIN Customers B ON A.customerName = B.id  INNER JOIN csKind C ON A.csKind = C.id`
+    ,A.gubun,A.etc,A.csKind,C.title as cskindTitle,C.category,C.bgcolor ,B.notes as customerEtc,B.contactPerson FROM schedules A INNER JOIN Customers B ON A.customerName = B.id  INNER JOIN csKind C ON A.csKind = C.id`
 
 
 
@@ -42,6 +42,7 @@ const getScheduleById = async (id) => {
 
 const getcsByDate = async (startDate, endDate, customerName) => {
     if (customerName == undefined) { customerName = '' }
+    console.log('getcsByDate',)
     const query = `SELECT ${selectqueryinit} WHERE A.created_at >= '${startDate} 00:00:00' AND A.created_at <= '${endDate} 23:59:59' and B.customerName like '%${customerName}%'`;
     const result = await sql.executeQuery(query);
     return result;
