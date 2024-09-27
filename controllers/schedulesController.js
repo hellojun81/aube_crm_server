@@ -18,37 +18,45 @@ const getAllSchedules = async (req, res) => {
 // 특정 Month 스케줄 가져오기
 const getScheduleById = async (req, res) => {
     try {
-        console.log('getScheduleById')
         let result
         const { id } = req.params;
         const { startDate, endDate, customerName, SearchMonth } = req.query;
         console.log({ 'req.query': req.query, id: id, SearchMonth: SearchMonth })
 
-        if (id == 'customers') {
-            const NewId=req.query.id
-            result = await schedulesService.getScheduleByCoustomerId(NewId);
-        } else if (id == 'cs') {
-            result = await schedulesService.getcsByDate(startDate, endDate, customerName);
-        } else if (id == 'schedules') {
-            if (SearchMonth) {
-                result = await schedulesService.getScheduleByMonth(SearchMonth);
-            } else {
-                result = await schedulesService.getScheduleById(SearchMonth);
-            }
-        } else if (id == 'getCsKind') {
-            const query = `SELECT id,title,calView FROM csKind`;
-            result = await sql.executeQuery(query);
-        } else {
-            console.log({ 'getScheduleById(id)': req.query, id: id })
-
-            result = await schedulesService.getScheduleById(id);
+        switch (id) {
+            case "customers":
+                const NewId = req.query.id
+                result = await schedulesService.getScheduleByCoustomerId(NewId);
+                break;
+            case "cs":
+                result = await schedulesService.getcsByDate(startDate, endDate, customerName);
+                break;
+            case "schedules":
+                if (SearchMonth) {
+                    result = await schedulesService.getScheduleByMonth(SearchMonth);
+                } else {
+                    result = await schedulesService.getScheduleById(SearchMonth);
+                }
+                break;
+            case "getCsKind":
+                const query = `SELECT B.id, CONCAT( B.title, '[', CASE WHEN IFNULL(SUM(CASE WHEN A.csKind IN (1, 2, 3, 4, 5) THEN 1 ELSE 0 END), 0) = 0 THEN '0' ELSE SUM(IFNULL(CASE WHEN A.csKind = 1 THEN 1 ELSE 0 END, 0) + IFNULL(CASE WHEN A.csKind = 2 THEN 1 ELSE 0 END, 0) + IFNULL(CASE WHEN A.csKind = 3 THEN 1 ELSE 0 END, 0) + IFNULL(CASE WHEN A.csKind = 4 THEN 1 ELSE 0 END, 0) + IFNULL(CASE WHEN A.csKind = 5 THEN 1 ELSE 0 END, 0)) END, ']' ) AS title, calView FROM csKind B LEFT JOIN schedules A ON A.csKind = B.id AND LEFT(A.start, 7) = "${SearchMonth}" GROUP BY B.id, B.title`;
+                result = await sql.executeQuery(query);
+                console.log({'getcsKindResult':result,query:query})
+                break;
+            default:
+                result = await schedulesService.getScheduleById(id);
+                break;
         }
+
 
         if (result) {
             res.json(result);
         } else {
             res.status(404).json({ error: 'Schedule not found' });
         }
+
+
+
 
     } catch (error) {
         console.error('Error fetching schedule:', error);

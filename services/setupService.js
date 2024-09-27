@@ -7,18 +7,26 @@ const getAllSetup = async () => {
     return await sql.executeQuery(query);
 };
 
-const getSetupTable = async (TableName) => {
+const getSetupID = async (TableName) => {
     console.log('getSetupTable',TableName)
     const query = `SELECT * FROM ${TableName.id}`;
     const result = await sql.executeQuery(query);
     return result;
 };
 
-// const getScheduleById = async (id) => {
-//     const query = 'SELECT * FROM schedules WHERE id = ?';
-//     const result = await sql.executeQuery(query, [id]);
-//     return result[0];
-// };
+const getScheduleById = async (id) => {
+    const query = 'SELECT * FROM schedules WHERE id = ?';
+    const result = await sql.executeQuery(query, [id]);
+    return result[0];
+};
+
+
+const getTotalSales=async(month)=>{
+    const query = `SELECT SUM(estPrice) AS TOTALSALES from schedules where LEFT(start, 7)='${month}' and csKind='3'`;
+    const result = await sql.executeQuery(query);
+    return result[0];
+
+}
 
 // const createSchedule = async (schedule) => {
 //     const { calendarId, title,  start, end, category, customerName, rentPlace, bgColor } = schedule;
@@ -48,7 +56,8 @@ const getSetupTable = async (TableName) => {
 
 export default {
     getAllSetup,
-    getSetupTable,
+    getSetupID,
+    getTotalSales
     // createSchedule,
     // getScheduleByMonth,
     // updateSchedule,

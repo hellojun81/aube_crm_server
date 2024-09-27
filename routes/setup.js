@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', setupController.getAllsetup);
 
 // GET 요청: 특정 스케줄 데이터 가져오기
-router.get('/:id', setupController.getSetupTable);
+router.get('/:id', setupController.getSetupID);
 
 // // POST 요청: 새로운 스케줄 추가
 // router.post('/', setupController.createSchedule);

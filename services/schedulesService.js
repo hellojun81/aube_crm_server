@@ -4,7 +4,8 @@ import sql from '../lib/sql.js';
 import dayjs from 'dayjs';
 
 const selectqueryinit=`A.id, B.customerName,CONCAT('[', C.title, ']', B.customerName) AS title, A.start,A.end,A.rentPlace,A.startTime,A.endTime,A.userInt,A.estPrice
-    ,A.gubun,A.etc,A.csKind,C.title as cskindTitle,C.category,C.bgcolor ,B.notes as customerEtc,B.contactPerson FROM schedules A INNER JOIN Customers B ON A.customerName = B.id  INNER JOIN csKind C ON A.csKind = C.id`
+    ,A.gubun,A.etc,A.csKind,C.title as cskindTitle,C.category,C.bgcolor ,B.notes as customerEtc,B.contactPerson 
+    FROM schedules A INNER JOIN Customers B ON A.customerName = B.id  INNER JOIN csKind C ON A.csKind = C.id`
 
 
 
@@ -67,7 +68,7 @@ const getScheduleByMonth = async (Month) => {
     and C.calView='1'`
 
     const result = await sql.executeQuery(query);
-    console.log(result)
+    // console.log(result)
     return result;
 };
 const updateCsKind = async (update_ID) => {
